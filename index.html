@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>A Tiny Question 🫰</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 20% 20%, #fff 0 5%, transparent 6%),
+        linear-gradient(135deg, #fff5f7, #f8f3ff, #eef8ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #333;
+    }
+
+    /* Floating background hearts */
+    .heart {
+      position: absolute;
+      opacity: 0.35;
+      animation: float 7s infinite ease-in-out;
+      pointer-events: none;
+      font-size: 24px;
+    }
+
+    .h1 { left: 8%; top: 18%; animation-delay: 0s; }
+    .h2 { right: 10%; top: 25%; animation-delay: 2s; }
+    .h3 { left: 15%; bottom: 15%; animation-delay: 4s; }
+    .h4 { right: 15%; bottom: 12%; animation-delay: 1s; }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) rotate(-5deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(8deg);
+      }
+    }
+
+    .card {
+      width: min(90%, 500px);
+      padding: 35px 25px 40px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      box-shadow: 0 20px 60px rgba(80, 50, 100, 0.12);
+      border: 1px solid rgba(255,255,255,0.8);
+      position: relative;
+      z-index: 2;
+    }
+
+    .tiny-text {
+      font-size: 13px;
+      color: #999;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    /* Big Korean finger heart */
+    .finger-heart {
+      font-size: 110px;
+      line-height: 1;
+      margin: 5px 0 20px;
+      filter: drop-shadow(0 8px 10px rgba(200, 100, 130, 0.18));
+      animation: gentleBounce 3s ease-in-out infinite;
+    }
+
+    @keyframes gentleBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+
+    h1 {
+      font-size: clamp(22px, 5vw, 30px);
+      margin: 0 auto 12px;
+      line-height: 1.3;
+      font-weight: 650;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 28px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      min-height: 70px;
+      position: relative;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 13px 27px;
+      border-radius: 50px;
+      transition:
+        transform 0.35s ease,
+        box-shadow 0.25s ease,
+        opacity 0.3s ease;
+    }
+
+    #yesBtn {
+      background: linear-gradient(135deg, #ff7f9f, #ff9db5);
+      color: white;
+      box-shadow: 0 8px 20px rgba(255, 100, 140, 0.25);
+      transform-origin: center;
+    }
+
+    #yesBtn:hover {
+      box-shadow: 0 10px 25px rgba(255, 100, 140, 0.35);
+    }
+
+    #noBtn {
+      background: #f0f0f0;
+      color: #777;
+      position: relative;
+    }
+
+    #noBtn:hover {
+      transform: scale(0.95);
+    }
+
+    .counter {
+      height: 20px;
+      margin-top: 18px;
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    /* Celebration screen */
+    #success {
+      display: none;
+      animation: appear 0.7s ease forwards;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .success-heart {
+      font-size: 95px;
+      margin-bottom: 15px;
+      animation: celebrate 1.2s ease-in-out infinite;
+    }
+
+    @keyframes celebrate {
+      0%, 100% {
+        transform: rotate(-8deg) scale(1);
+      }
+      50% {
+        transform: rotate(8deg) scale(1.08);
+      }
+    }
+
+    .thankyou {
+      font-size: 30px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      color: #888;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .mini-confetti {
+      position: fixed;
+      font-size: 22px;
+      pointer-events: none;
+      animation: fall 2.5s linear forwards;
+      z-index: 10;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .card {
+        padding: 30px 18px 35px;
+      }
+
+      .finger-heart {
+        font-size: 90px;
+      }
+
+      .buttons {
+        gap: 12px;
+      }
+
+      button {
+        padding: 12px 23px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Background decoration -->
+  <div class="heart h1">♡</div>
+  <div class="heart h2">♡</div>
+  <div class="heart h3">♡</div>
+  <div class="heart h4">♡</div>
+
+  <div class="card">
+
+    <!-- QUESTION SCREEN -->
+    <div id="questionScreen">
+
+      <div class="tiny-text">
+        A very small question...
+      </div>
+
+      <div class="finger-heart">
+        🫰
+      </div>
+
+      <h1>
+        Will you forgive me for not making it home for darshan?
+      </h1>
+
+      <div class="subtitle">
+        Please choose wisely. 😌
+      </div>
+
+      <div class="buttons">
+
+        <button id="yesBtn" onclick="sayYes()">
+          Yes 🫶
+        </button>
+
+        <button id="noBtn" onclick="sayNo()">
+          No
+        </button>
+
+      </div>
+
+      <div class="counter" id="counter"></div>
+
+    </div>
+
+
+    <!-- SUCCESS SCREEN -->
+    <div id="success">
+
+      <div class="success-heart">
+        🫰✨
+      </div>
+
+      <div class="thankyou">
+        Thank you so much! 🥹
+      </div>
+
+      <div class="message">
+        Knew you had a little kindness in you. 😂<br>
+        Consider this my virtual apology + finger heart.
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    let noClicks = 0;
+
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const counter = document.getElementById("counter");
+
+    function sayNo() {
+
+      noClicks++;
+
+      /*
+        YES grows with every NO click.
+        Maximum = 5 clicks.
+      */
+
+      const scale = 1 + (noClicks * 0.28);
+
+      yesBtn.style.transform = `scale(${scale})`;
+
+      if (noClicks < 5) {
+
+        const messages = [
+          "Are you sure? 👀",
+          "Think again... 😌",
+          "That button looks suspicious. 😂",
+          "Last few chances... 👀",
+          "Okay, that's enough. 😂"
+        ];
+
+        counter.innerText = messages[noClicks - 1];
+
+      } else {
+
+        // Maximum size reached
+        yesBtn.style.transform = "scale(2.4)";
+
+        counter.innerText = "I think the answer is obvious now. 🫰";
+
+        // Make No button less tempting
+        noBtn.style.opacity = "0.35";
+      }
+    }
+
+
+    function sayYes() {
+
+      document.getElementById("questionScreen").style.display = "none";
+
+      document.getElementById("success").style.display = "block";
+
+      createCelebration();
+
+    }
+
+
+    function createCelebration() {
+
+      const symbols = ["🫰", "♡", "✨", "💗", "🌸"];
+
+      for (let i = 0; i < 35; i++) {
+
+        const item = document.createElement("div");
+
+        item.className = "mini-confetti";
+
+        item.innerText =
+          symbols[Math.floor(Math.random() * symbols.length)];
+
+        item.style.left = Math.random() * 100 + "vw";
+
+        item.style.top = "-30px";
+
+        item.style.animationDelay =
+          Math.random() * 1.2 + "s";
+
+        item.style.fontSize =
+          (16 + Math.random() * 18) + "px";
+
+        document.body.appendChild(item);
+
+        setTimeout(() => {
+          item.remove();
+        }, 4000);
+      }
+    }
+
+  </script>
+
+</body>
+</html>
